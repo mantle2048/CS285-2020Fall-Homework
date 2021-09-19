@@ -34,3 +34,13 @@ The following figure shows the effect of hyperparameter: `num_agent_train_steps_
 <!-- #endregion -->
 
 ![bc_params](image/figure/bc_Ant-v2.png)
+
+
+# Section2 DAgger
+
+## Question 2.2 DAgger
+
+
+Run `./run.sh 2` to generate the numbers for Section 2 Question 2. `num_agent_train_steps_per_iter` is changed to 5000. Check `run.sh` for more details.
+
+![bc_params](image/figure/dagger_Humanoid-v2.png)

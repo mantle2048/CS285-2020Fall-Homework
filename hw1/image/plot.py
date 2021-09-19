@@ -11,11 +11,11 @@ from collections import defaultdict
 cur_dir = os.getcwd()
 if 'image' in cur_dir.split('/'):
     data_path = os.path.join(cur_dir, 'hyperparameters/')
-    dagger_data_path = os.path.join(cur_dir, 'dagger/Hopper')
+    dagger_data_path = os.path.join(cur_dir, 'dagger/Humanoid')
     fig_save_path = os.path.join(cur_dir, 'figure/')
 else:
     data_path = os.path.join(cur_dir, 'image/hyperparameters/')
-    dagger_data_path = os.path.join(cur_dir, 'image/dagger/Hopper')
+    dagger_data_path = os.path.join(cur_dir, 'image/dagger/Humanoid')
     fig_save_path = os.path.join(cur_dir, 'image/figure/')
     
 my_cmp = lambda x: int(x.split('_')[3])
@@ -151,13 +151,13 @@ def plot_dagger_data(data, xaxis='Steps',value='AverageReturn', std='StdReturn',
     expert_return = np.array(data['Expert_'+value])
     expert_std = np.array(data['Expert_'+std])
     
-    fig, ax = plt.subplots(1,1, figsize=(8,5))
+    fig, ax = plt.subplots(1,1, figsize=(16,10))
     plt.errorbar(x, eval_return, eval_std, linestyle='--', elinewidth=2, marker='o',capsize=8,capthick=1, label='DAgger')
     plt.errorbar(x, bc_return, bc_std,linestyle='--',elinewidth=2, marker='o',capsize=8,capthick=1, label='Behavior Cloning')
     plt.errorbar(x, expert_return, expert_std,linestyle='--',elinewidth=2, marker='o',capsize=8,capthick=1, label='Expert')
     plt.xlabel('n_iter')
     plt.ylabel('AverageReturn')
-    plt.ylim([0000, 4000])
+    plt.ylim([0, 11000])
     plt.title(env_name)
     plt.legend()
     plt.show()

@@ -217,7 +217,7 @@ class RL_Trainer(object):
         # and replace paths[i]["action"] with these expert labels
 
         for i in range(len(paths)):
-            expert_acts = self.agent.actor.get_action(paths[i]["observation"])
+            expert_acts = expert_policy.get_action(paths[i]["observation"])
             paths[i]["action"] = expert_acts
         return paths
 
