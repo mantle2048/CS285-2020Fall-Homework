@@ -119,8 +119,11 @@ class MLPPolicySL(MLPPolicy):
             self, observations, actions,
             adv_n=None, acs_labels_na=None, qvals=None
     ):
-        # TODO: update the policy and return the loss
+        # TODO/Done: update the policy and return the loss
+
+        # import ipdb; ipdb.set_trace()
         obss = ptu.from_numpy(observations.astype(np.float32))
+        # import ipdb;ipdb.set_trace()
         acts = self.forward(obss).rsample()
         actions = ptu.from_numpy(actions)
         loss = self.loss(acts, actions)

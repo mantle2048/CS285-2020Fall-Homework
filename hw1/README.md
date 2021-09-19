@@ -1,22 +1,24 @@
 **Note**: install the cs285 package by
 ```pip install -e .```
 
-# Q1 Behavior Cloning
+# Section1 Behavior Cloning
 
 
-## 1.2 Performance
+## Question 1.2 Performance
 
 Run `./run.sh 1.2` to generate the numbers for Section 1 Question 2. Check `run.sh` for more details.
+
+The agent was trained on 1000 steps of expert behavior in each environment. It was then evaluated for 5000 steps to get an accurate mean performance. The agent itself had an MLP policy consisting of 2 hidden layers of 64 neurons each.
 
 |Environment|HalfCheetah|Ant|Hopper|Walker2d|Humanoid|
 |:--:|:--:|:--:|:--:|:--:|:--:|
 |Expert Mean|4205.78|4713.65|3772.67|5566.84|10344.52|
-|BC Mean|2863.95|614.93|1093.88|107.39|279.93|
+|BC Mean|3141.98|1406.29|694.87|391.91|297.14|
 |Expert Std|83.04|12.20|1.95|9.23|20.98|
-|BC Std|192.84|24.00|275.36|129.29|16.34|
+|BC Std|125.42|544.66|309.72|480.56|22.40|
 
 
-## 1.3 Hyperparameter
+## Question 1.3 Hyperparameter
 
 
 This section explores the impact of hyperparameter: `num_agent_train_steps_per_iter`.
