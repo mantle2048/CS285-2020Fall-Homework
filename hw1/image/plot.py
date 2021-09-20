@@ -79,10 +79,6 @@ def plot_data(data, xaxis='Training_steps',value='AverageReturn', std='StdReturn
     plt.savefig(os.path.join(fig_save_path,f'bc_{env_name}.png'), dpi=300)
     print(f'Figure was saved in {fig_save_path}')
     
-if __name__ == '__main__':
-    data = get_dataframe(data_path)
-    plot_data(data)
-
 
 # -
 
@@ -126,14 +122,14 @@ def tabulate_dagger_events(data_path):
 
 
 # +
-def get_dataframe(data_path):
+def get_dagger_dataframe(data_path):
     dirs = sorted(os.listdir(data_path), key=my_cmp)
     train_steps_per_iter = [data_dir.split('_')[3] for data_dir in dirs]
     tabulate_datas, steps = tabulate_dagger_events(data_path)
     df = pd.DataFrame(tabulate_datas)
     return df
 
-get_dataframe(dagger_data_path) 
+get_dagger_dataframe(dagger_data_path) 
 
 
 # -
@@ -151,7 +147,7 @@ def plot_dagger_data(data, xaxis='Steps',value='AverageReturn', std='StdReturn',
     expert_return = np.array(data['Expert_'+value])
     expert_std = np.array(data['Expert_'+std])
     
-    fig, ax = plt.subplots(1,1, figsize=(16,10))
+    fig, ax = plt.subplots(1,1, figsize=(8,5))
     plt.errorbar(x, eval_return, eval_std, linestyle='--', elinewidth=2, marker='o',capsize=8,capthick=1, label='DAgger')
     plt.errorbar(x, bc_return, bc_std,linestyle='--',elinewidth=2, marker='o',capsize=8,capthick=1, label='Behavior Cloning')
     plt.errorbar(x, expert_return, expert_std,linestyle='--',elinewidth=2, marker='o',capsize=8,capthick=1, label='Expert')
@@ -166,7 +162,9 @@ def plot_dagger_data(data, xaxis='Steps',value='AverageReturn', std='StdReturn',
     plt.savefig(image_name, dpi=300)
     print(f'Figure {image_name} was saved in {fig_save_path}')
 if __name__ == '__main__':
-    dagger_data =  get_dataframe(dagger_data_path)
+    data = get_dataframe(data_path)
+    plot_data(data)
+    dagger_data =  get_dagger_dataframe(dagger_data_path)
     plot_dagger_data(dagger_data)
 
 

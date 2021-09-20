@@ -41,6 +41,13 @@ The following figure shows the effect of hyperparameter: `num_agent_train_steps_
 ## Question 2.2 DAgger
 
 
-Run `./run.sh 2` to generate the numbers for Section 2 Question 2. `num_agent_train_steps_per_iter` is changed to 5000. Check `run.sh` for more details.
+Run `./run.sh 2` to generate the numbers for Section 2 Question 2. Check `run.sh` for more details.
+
+`num_agent_train_steps_per_iter` is changed to 2000. `n_iter` is chenged to 201 for Humanoid-v2.
+
+I found that DAgger can easily solve all tasks (within 10 iterations) other than Humanoid-v2. Therefore, I only show the experiment of Humanoid-v2.
+
+However, even after 200 iterations, the performance of Humanoid is still not good enough. If you have better results, please let me know.
+
 
 ![bc_params](image/figure/dagger_Humanoid-v2.png)
