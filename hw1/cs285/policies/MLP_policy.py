@@ -98,7 +98,7 @@ class MLPPolicy(BasePolicy, nn.Module, metaclass=abc.ABCMeta):
     def forward(self, observation: torch.FloatTensor) -> Any:
         if self.discrete:
             logits_na = self.logits_na(observation)
-            act_dist = distributions.Categorial(logits_na)
+            act_dist = distributions.Categorial(logits=logits_na)
 
         else:
             mean_na = self.mean_net(observation)

@@ -100,8 +100,8 @@ if [[ $1 = "2.2" ]]; then
 fi
 
 if [[ $1 == "2.3" ]]; then
-    python cs285/scripts/run_hw2.py \
-        --env_name LunarLanderContinuous-v2 \
+    python $hw_dir \
+        --env_name 'LunarLanderContinuous-v2' \
         --ep_len 1000 \
         --discount 0.99 \
         --n_iter 100 \
@@ -113,4 +113,26 @@ if [[ $1 == "2.3" ]]; then
         --nn_baseline \
         --exp_name 'q3_b-40000_r-0.005' \
         --video_log_freq -1
+fi
+
+if [[ $1 == "2.4" ]]; then
+    batch_sizes=(50000)
+    lrs=(1e-2)
+    for batch_size in ${batch_sizes[@]}; do
+        for lr in ${lrs[@]}; do
+            python $hw_dir \
+                --env 'HalfCheetah-v2' \
+                --ep_len 150 \
+                --discount 0.95 \
+                --n_iter 100 \
+                --n_layers 2 \
+                --size 32 \
+                --batch_size $batch_size \
+                --learning_rate $lr \
+                --reward_to_go \
+                --nn_baseline \
+                --exp_name 'q4_search_b_'$batch_size'_lr_'$lr'_rtg_nnbaseline' \
+                --video_log_freq -1
+        done
+    done
 fi
