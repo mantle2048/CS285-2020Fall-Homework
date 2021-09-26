@@ -114,10 +114,14 @@ class MLPPolicy(BasePolicy, nn.Module, metaclass=abc.ABCMeta):
         if self.discrete:
             logits_na = self.logits_na(observation)
             act_dist = distributions.Categorical(logits=logits_na)
+
         else:
             mean_na = self.mean_net(observation)
             std_na = torch.exp(self.logstd)
-            act_dist = distributions.Normal(mean_na, std_na)
+            # helpful: difference between multivariatenormal and normal sample/batch/event shapes:
+            # https://bochang.me/blog/posts/pytorch-distributions/
+            # https://ericmjl.github.io/blog/2019/5/29/reasoning-about-shapes-and-probability-distributions/
+            act_dist = distributions.MultivariateNormal(loc=mean_na, scale_tril=torch.diag(std_na))
 
         return act_dist
 
@@ -144,6 +148,7 @@ class MLPPolicyPG(MLPPolicy):
             # by the `forward` method
         # HINT3: don't forget that `optimizer.step()` MINIMIZES a loss
 
+        # import ipdb; ipdb.set_trace()
         log_pi = self.forward(observations).log_prob(actions)
         weighted_pg = torch.mul(log_pi, advantages)
         loss = torch.neg(torch.sum(weighted_pg))

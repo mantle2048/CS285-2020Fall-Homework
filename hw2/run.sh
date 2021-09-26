@@ -76,3 +76,41 @@ if [[ $1 = "2.1" ]]; then
     done
 
 fi
+
+if [[ $1 = "2.2" ]]; then
+    batch_sizes=(100 500 1000)
+    lrs=(5e-4 1e-3 5e-3)
+    for  batch_size in ${batch_sizes[@]}; do
+        for  lr in ${lrs[@]}; do
+            python $hw_dir \
+                --env_name 'InvertedPendulum-v2' \
+                --ep_len 1000 \
+                --discount 0.9 \
+                --n_iter 100 \
+                --n_layers 2 \
+                --size 64 \
+                --batch_size $batch_size \
+                --learning_rate $lr \
+                --reward_to_go \
+                --exp_name 'q2_b_'$batch_size'_r_'$lr \
+                --eval_batch_size 400 \
+                --video_log_freq -1
+        done
+    done
+fi
+
+if [[ $1 == "2.3" ]]; then
+    python cs285/scripts/run_hw2.py \
+        --env_name LunarLanderContinuous-v2 \
+        --ep_len 1000 \
+        --discount 0.99 \
+        --n_iter 100 \
+        --n_layers 100 \
+        --size 64 \
+        --batch_size 40000 \
+        --learning_rate 5e-3 \
+        --reward_to_go \
+        --nn_baseline \
+        --exp_name 'q3_b-40000_r-0.005' \
+        --video_log_freq -1
+fi
