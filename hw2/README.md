@@ -1,28 +1,35 @@
-## Setup
+**Note**: Run `pip install -e .` to install cs285 package
 
-You can run this code on your own machine or on Google Colab. 
 
-1. **Local option:** If you choose to run locally, you will need to install MuJoCo and some Python packages; see [installation.md](../hw1/installation.md) from homework 1 for instructions. If you completed this installation for homework 1, you do not need to repeat it.
-2. **Colab:** The first few sections of the notebook will install all required dependencies. You can try out the Colab option by clicking the badge below:
+# Section 2
+## 1. Experiment 1 (CartPole)
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/berkeleydeeprlcourse/homework_fall2020/blob/master/hw2/cs285/scripts/run_hw2.ipynb)
 
-## Complete the code
+### 1.1 q1 small batch
+![q1_lb](image/q1_sb.png)
+**<center>fig1: experiments of q1_sb </center>**
 
-The following files have blanks to be filled with your solutions from homework 1. The relevant sections are marked with "TODO: get this from hw1".
+### 1.2 q1 large batch
+![q1_lb](image/q1_lb.png)
+**<center>fig2: experiments of q1_lb </center>**
 
-- [infrastructure/rl_trainer.py](cs285/infrastructure/rl_trainer.py)
-- [infrastructure/utils.py](cs285/infrastructure/utils.py)
-- [policies/MLP_policy.py](cs285/policies/MLP_policy.py)
+<!-- #region -->
+### 1.3 Q&A
 
-You will then need to complete the following new files for homework 2. The relevant sections are marked with "TODO".
-- [agents/pg_agent.py](cs285/agents/pg_agent.py)
-- [policies/MLP_policy.py](cs285/policies/MLP_policy.py)
+- **Q: Which value estimator has better performance without advantage-standardization: the trajectorycentric one, or the one using reward-to-go?**
+- **A: from `q1_sb_no-rtg_dsa` (the orange line) and `q1_sb_rtg_dsa` (the green line), we can see that the reward-to-go value estimator is better than the the trajectorycentric one.**
 
-You will also want to look through [scripts/run_hw2.py](cs285/scripts/run_hw2.py) (if running locally) or [scripts/run_hw2.ipynb](cs285/scripts/run_hw1.2pynb) (if running on Colab), though you will not need to edit this files beyond changing runtime arguments in the Colab notebook.
 
-You will be running your policy gradients implementation in four experiments total, investigating the effects of design decisions like reward-to-go estimators, neural network baselines for variance reduction, and advantage normalization. See the [assignment PDF](cs285_hw2.pdf) for more details.
+- **Q: Did advantage standardization help?**
+- **A: Yes, as can be seen from fig.1, advantage standardization can reduce variance.**
 
-## Plotting your results
 
-We have provided a snippet that may be used for reading your Tensorboard eventfiles in [scripts/read_results.py](cs285/scripts/read_results.py). Reading these eventfiles and plotting them with [matplotlib](https://matplotlib.org/) or [seaborn](https://seaborn.pydata.org/) will produce the cleanest results for your submission. For debugging purposes, we recommend visualizing the Tensorboard logs using `tensorboard --logdir data`.
+- **Q: Did the batch size make an impact**
+- **A: Larger batch size can speed up training and reduce variance.**
+<!-- #endregion -->
+
+### 1.4 the exact command line configurations
+
+**Excute `./run.sh 2.1` to run q1 experiments.**
+
+**Excute `python cs285/scripts/read_results.py` to get fig1 and fig2 (figures will be saved in `image` folder)**

@@ -150,12 +150,35 @@ class RL_Trainer(object):
     ####################################
 
     def collect_training_trajectories(self, itr, load_initial_expertdata, collect_policy, batch_size):
-        # TODO: get this from hw1
+        # TODO/Done: get this from hw1
         # if your load_initial_expertdata is None, then you need to collect new trajectories at *every* iteration
+        if itr == 0 and load_initial_expertdata is not None:
+            import pickle
+            with open(load_initial_expertdata, 'rb') as fr:
+                loaded_paths = pickle.load(fr)
+                return loaded_paths, 0, None
+
+        print("\nCollecting data to be used for training...")
+        paths, envsteps_this_batch = \
+                utils.sample_trajectories(self.env, collect_policy, batch_size, self.params['ep_len'])
+
+        train_video_paths = None
+        if self.log_video:
+            print("\nCollecting train rollouts to be used for saving videos...")
+            train_video_paths = utils.sample_n_trajectories(self.env, collect_policy, MAX_NVIDEO, MAX_VIDEO_LEN, render=True)
+
         return paths, envsteps_this_batch, train_video_paths
 
     def train_agent(self):
-        # TODO: get this from hw1
+        # TODO/Done: get this from hw1
+        print('\nTraining agent using sampled data from replay buffer...')
+        train_logs = []
+        for train_step in range(self.params['num_agent_train_steps_per_iter']):
+            obs_batch, act_batch, rew_batch, next_obs_batch, terminal_batch = self.agent.sample(self.params['train_batch_size'])
+
+            train_log = self.agent.train(obs_batch, act_batch, rew_batch, next_obs_batch, terminal_batch)
+            train_logs.append(train_log)
+
         return train_logs
 
     ####################################
@@ -218,6 +241,7 @@ class RL_Trainer(object):
             logs["Initial_DataCollection_AverageReturn"] = self.initial_return
 
             # perform the logging
+            print( '_'.join([self.params['exp_name'], self.params['env_name']]))
             for key, value in logs.items():
                 print('{} : {}'.format(key, value))
                 self.logger.log_scalar(value, key, itr)

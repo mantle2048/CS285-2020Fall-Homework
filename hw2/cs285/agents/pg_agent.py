@@ -3,6 +3,7 @@ import numpy as np
 from .base_agent import BaseAgent
 from cs285.policies.MLP_policy import MLPPolicyPG
 from cs285.infrastructure.replay_buffer import ReplayBuffer
+from cs285.infrastructure import utils
 
 
 class PGAgent(BaseAgent):
@@ -44,9 +45,9 @@ class PGAgent(BaseAgent):
         # step 2: calculate advantages that correspond to each (s_t, a_t) point
         advantages = self.estimate_advantage(observations, q_values)
 
-        # TODO: step 3: use all datapoints (s_t, a_t, q_t, adv_t) to update the PG actor/policy
+        # TODO/Done: step 3: use all datapoints (s_t, a_t, q_t, adv_t) to update the PG actor/policy
         ## HINT: `train_log` should be returned by your actor update method
-        train_log = TODO
+        train_log = self.actor.update(observations, actions, advantages, q_values)
 
         return train_log
 
@@ -90,8 +91,8 @@ class PGAgent(BaseAgent):
             ## baseline was trained with standardized q_values, so ensure that the predictions
             ## have the same mean and standard deviation as the current batch of q_values
             baselines = baselines_unnormalized * np.std(q_values) + np.mean(q_values)
-            ## TODO: compute advantage estimates using q_values and baselines
-            advantages = TODO
+            ## TODO/Done: compute advantage estimates using q_values and baselines
+            advantages = q_values - baselines
 
         # Else, just set the advantage to [Q]
         else:
@@ -99,10 +100,10 @@ class PGAgent(BaseAgent):
 
         # Normalize the resulting advantages
         if self.standardize_advantages:
-            ## TODO: standardize the advantages to have a mean of zero
+            ## TODO/Done: standardize the advantages to have a mean of zero
             ## and a standard deviation of one
             ## HINT: there is a `normalize` function in `infrastructure.utils`
-            advantages = TODO
+            advantages = utils.normalize(advantages, np.mean(advantages), np.std(advantages))
 
         return advantages
 
@@ -128,10 +129,26 @@ class PGAgent(BaseAgent):
             Output: list where each index t contains sum_{t'=0}^T gamma^t' r_{t'}
         """
 
-        # TODO: create list_of_discounted_returns
+        # TODO/Done: create list_of_discounted_returns
         # Hint: note that all entries of this output are equivalent
             # because each sum is from 0 to T (and doesnt involve t)
 
+
+        # Solution1 (DP):
+        # discounted_return1 = 0
+        # for rew in rewards[::-1]:
+        #     discounted_return1 = rew + self.gamma * discounted_return1
+
+        # Solution2 (use magic `reduce` funtion!!):
+        # from functools import reduce
+        # discounted_return2 = reduce(lambda x, y: self.gamma*x+y, rewards[::-1])
+
+        # Soultion3 (elegant!)
+        # discounted_return3 = self._discounted_cumsum(rewards)[0]
+
+        # assert discounted_return1 == discounted_return2 == discounted_return3 , 'Wrong among three solutions!'
+
+        list_of_discounted_returns = [self._discounted_cumsum(rewards)[0]] * len(rewards)
         return list_of_discounted_returns
 
     def _discounted_cumsum(self, rewards):
@@ -141,11 +158,19 @@ class PGAgent(BaseAgent):
             -and returns a list where the entry in each index t' is sum_{t'=t}^T gamma^(t'-t) * r_{t'}
         """
 
-        # TODO: create `list_of_discounted_returns`
+        # TODO/Done: create `list_of_discounted_returns`
         # HINT1: note that each entry of the output should now be unique,
             # because the summation happens over [t, T] instead of [0, T]
         # HINT2: it is possible to write a vectorized solution, but a solution
             # using a for loop is also fine
+        ''' magic solution for discounted_cumsum from spingingup!
+            C[i] = R[i] + discount * C[i+1]
+            signal.lfiter(b, a, x, axis=-1, zi=None)
+            a[0]*y[n] = b[0]*x[n] + b[1]*x[n-1] + ... + b[M]*x[n-M]
+                        - a[1]*y[n-1] - ... - a[N]*y[n-N]
+        '''
+        import scipy.signal
+        list_of_discounted_cumsums = scipy.signal.lfilter([1], [1, -self.gamma], rewards[::-1], axis=0)[::-1]
 
         return list_of_discounted_cumsums
 
