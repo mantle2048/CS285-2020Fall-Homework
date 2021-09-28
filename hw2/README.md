@@ -106,7 +106,7 @@
 <!-- #region -->
 ### 4.2 learning curve
 
-- **the learning curves for the HalfCheetah experiments is shown in fig5.**
+- **the learning curves for the HalfCheetah experiments is shown in fig6.**
 
 
 - **Excute `./run.sh 2.4.2` to get results and `python cs285/scripts/read_results.py` to get fig6 (the figure will be saved in `image` folder)**
@@ -114,3 +114,23 @@
 
 ![q4.2](image/q4_2.png)
 **<center>fig6: experiments of q4.2 </center>**
+
+<!-- #region -->
+## Bonus-GAE
+
+## 5 Experiment 5 (Hopper-v2) 
+**Note:** (this experiment copy from cs285 2021Fall homework)
+
+
+- **the learning curves for the HalfCheetah experiments is shown in fig7.**
+
+
+- **Excute `./run.sh 2.5` to get results and `python cs285/scripts/read_results.py` to get fig7 (the figure will be saved in `image` folder)**
+<!-- #endregion -->
+
+![q5](image/q5.png)
+**<center>fig7: experiments of Bouns-GAE </center>**
+
+```python
+
+```

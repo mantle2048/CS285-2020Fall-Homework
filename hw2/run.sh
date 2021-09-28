@@ -191,3 +191,24 @@ if [[ $1 == "2.4.2" ]]; then
         --learning_rate 0.02 \
         --exp_name "q4_b-30000_lr-0.02_rtg_nnbaseline"
 fi
+
+if [[ $1 = "2.5" ]]; then
+    lambdas=(0.99)
+    for lambda in ${lambdas[@]}; do
+        python $hw_dir \
+            --env_name 'Hopper-v2' \
+            --ep_len 1000 \
+            --discount 0.99 \
+            --n_iter 300 \
+            --n_layers 2  \
+            --size 32 \
+            --batch_size 2000 \
+            --learning_rate 0.001 \
+            --reward_to_go \
+            --nn_baseline \
+            --action_noise_std 0.5 \
+            --gae_lambda $lambda \
+            --exp_name 'test_q5_b-2000_r-0.001_lambda-'$lambda
+    done
+
+fi
