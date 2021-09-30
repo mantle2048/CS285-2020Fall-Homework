@@ -1,7 +1,7 @@
 import numpy as np
 
 from .base_agent import BaseAgent
-from cs285.policies.MLP_policy import MLPPolicyPG
+from cs285.policies.MLP_policy import MLPPolicyPG, MultiStepMLPPolicyPG
 from cs285.infrastructure.replay_buffer import ReplayBuffer
 from cs285.infrastructure import utils
 
@@ -20,15 +20,29 @@ class PGAgent(BaseAgent):
         self.gae_lambda = self.agent_params['gae_lambda']
 
         # actor/policy
-        self.actor = MLPPolicyPG(
-            self.agent_params['ac_dim'],
-            self.agent_params['ob_dim'],
-            self.agent_params['n_layers'],
-            self.agent_params['size'],
-            discrete=self.agent_params['discrete'],
-            learning_rate=self.agent_params['learning_rate'],
-            nn_baseline=self.agent_params['nn_baseline']
-        )
+        if self.agent_params['multi_step'] > 1:
+
+            self.actor = MultiStepMLPPolicyPG(
+                self.agent_params['multi_step'],
+                self.agent_params['ac_dim'],
+                self.agent_params['ob_dim'],
+                self.agent_params['n_layers'],
+                self.agent_params['size'],
+                discrete=self.agent_params['discrete'],
+                learning_rate=self.agent_params['learning_rate'],
+                nn_baseline=self.agent_params['nn_baseline']
+            )
+
+        else:
+            self.actor = MLPPolicyPG(
+                self.agent_params['ac_dim'],
+                self.agent_params['ob_dim'],
+                self.agent_params['n_layers'],
+                self.agent_params['size'],
+                discrete=self.agent_params['discrete'],
+                learning_rate=self.agent_params['learning_rate'],
+                nn_baseline=self.agent_params['nn_baseline']
+            )
 
         # replay buffer
         self.replay_buffer = ReplayBuffer(1000000)
@@ -109,14 +123,14 @@ class PGAgent(BaseAgent):
 
                 for i in reversed(range(batch_size)):
 
-                    advantages[i] = self.gamma * self.gae_lambda * advantages[i+1] * (1 - terminals[i]) + deltas[i]
-                    ## TODO: recursively compute advantage estimates starting from
+                    ## TODO/Done: recursively compute advantage estimates starting from
                         ## timestep T.
                     ## HINT 1: use terminals to handle edge cases. terminals[i]
                         ## is 1 if the state is the last in its trajectory, and
                         ## 0 otherwise.
                     ## HINT 2: self.gae_lambda is the lambda value in the
                         ## GAE formula
+                    advantages[i] = self.gamma * self.gae_lambda * advantages[i+1] * (1 - terminals[i]) + deltas[i]
 
                 # remove dummy advantage
                 advantages = advantages[:-1]

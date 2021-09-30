@@ -208,7 +208,50 @@ if [[ $1 = "2.5" ]]; then
             --nn_baseline \
             --action_noise_std 0.5 \
             --gae_lambda $lambda \
-            --exp_name 'test_q5_b-2000_r-0.001_lambda-'$lambda
+            --exp_name 'q5_b_2000_r_0.001_lambda_'$lambda
     done
 
+fi
+
+if [[ $1 == "2.6" ]]; then
+    seeds=(0 1 2 3 4)
+    for seed in ${seeds[@]}; do
+        python $hw_dir \
+            --env_name 'LunarLanderContinuous-v2' \
+            --ep_len 1000 \
+            --discount 0.99 \
+            --n_iter 100 \
+            --n_layers 2 \
+            --size 64 \
+            --batch_size 40000 \
+            --learning_rate 5e-3 \
+            --reward_to_go \
+            --seed $seed \
+            --nn_baseline \
+            --exp_name 'q6_b_40000_r_0.005' \
+            --num_envs  10 \
+            --video_log_freq -1
+    done
+fi
+
+if [[ $1 == "2.7" ]]; then
+
+    multi_steps=(1 2 3 4)
+    for ms in ${multi_steps[@]}; do
+        python $hw_dir \
+            --env_name "HalfCheetah-v2" \
+            --ep_len 150 \
+            --discount 0.95 \
+            --n_iter 100  \
+            --n_layers 2  \
+            --size 32  \
+            --nn_baseline \
+            --reward_to_go \
+            --batch_size 30000  \
+            --num_envs 15 \
+            --multi_step $ms \
+            --learning_rate 0.02 \
+            --seed 2 \
+            --exp_name "q7_b_30000_lr_0.02_ms_"$ms"_rtg_nnbaseline"
+    done
 fi

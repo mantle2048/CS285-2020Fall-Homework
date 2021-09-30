@@ -118,7 +118,7 @@
 <!-- #region -->
 ## Bonus-GAE
 
-## 5 Experiment 5 (Hopper-v2) 
+## Experiment 5 (Hopper-v2) 
 **Note:** (this experiment copy from cs285 2021Fall homework)
 
 
@@ -131,6 +131,77 @@
 ![q5](image/q5.png)
 **<center>fig7: experiments of Bouns-GAE </center>**
 
-```python
+<!-- #region -->
+## Bonus-Multi threads
+## Experiment 6 (LunarLander)
+- **I compared the training time with experiment 3.**
 
+
+- **With `gym.vector.Asyncvectorenv`, you can easily implement multiprocessing to sample trajectories.**
+
+
+- **Excute `./run.sh 2.6` to get results and `python cs285/scripts/read_results.py` to get fig8 (the figure will be saved in `image` folder)**
+
+
+- **The function to set parallel sampling is as follows. `num_envs` is used to specify the number of threads used.**
+
+
+```python
+def make_envs(env_id, num_envs, seed, start_idx=0):
+    def make_env(rank):
+        def fn():
+            env = gym.make(env_id)
+            env.seed(seed+rank)
+            env.action_space.seed(seed+rank)
+            return env
+        return fn
+    if num_envs == 1: return make_env(start_idx)
+    return AsyncVectorEnv(env_fns=[make_env(start_idx+rank) for rank in range(num_envs)])
 ```
+
+- **The training time of the five experiments is shown in the table below. After using 10 process parallel sampling, the training time is reduced by more than 5 times!**
+
+||Single Thread <br> Train Time(s)|10 Threads <br> Train Time(s)|
+|:--:|:--:|:--:|
+|Run1|5309|976|
+|Run2|5149|968|
+|Run3|5309|985|
+|Run4|5190|980|
+|Run5|5295|984|
+|Average|5250|978|
+<!-- #endregion -->
+
+![q6](image/q6.png)
+**<center> fig8: experiment of Bonus-MultiThread </center>**
+
+<!-- #region -->
+## Bonus-MultiStep PG
+## Experiment 7 (HalfCheetah)
+
+- **I compared multi-step PG with the optimal parameters selected in Experiment 4.1. I taking multiple gradient descent steps from 1 to 4 with the same batch of data.**
+
+
+- **There are many ways to do multi-step gradient descent. I constructed a simple loop.**
+
+
+``` python
+self.optimizer.zero_grad()
+for _ in range(self.multi_step-1):
+    loss.backward(retain_graph=True)
+loss.backward()
+self.optimizer.step()
+```
+
+- **I used 15 parallel environments for sample collection and conducted experiments on another PC, so the performance is slightly different from that in experiment 4.1.**
+
+
+- Reinforcement learning is really a metaphysics!
+
+
+- **Excute `./run.sh 2.7` to get results and `python cs285/scripts/read_results.py` to get fig9 (the figure will be saved in `image` folder)**
+
+
+- The learning curve is smoothed for clarity.
+<!-- #endregion -->
+
+![q7](image/q7.png)

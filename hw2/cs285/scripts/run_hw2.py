@@ -1,7 +1,7 @@
 import os
 import time
 
-from cs285.infrastructure.rl_trainer import RL_Trainer
+from cs285.infrastructure.rl_trainer import RL_Trainer, MP_RL_Trainer
 from cs285.agents.pg_agent import PGAgent
 
 class PG_Trainer(object):
@@ -28,6 +28,7 @@ class PG_Trainer(object):
 
         train_args = {
             'num_agent_train_steps_per_iter': params['num_agent_train_steps_per_iter'],
+            'multi_step': params['multi_step'],
         }
 
         agent_params = {**computation_graph_args, **estimate_advantage_args, **train_args}
@@ -41,7 +42,10 @@ class PG_Trainer(object):
         ## RL TRAINER
         ################
 
-        self.rl_trainer = RL_Trainer(self.params)
+        if self.params['num_envs'] > 1:
+            self.rl_trainer = MP_RL_Trainer(self.params)
+        else:
+            self.rl_trainer = RL_Trainer(self.params)
 
     def run_training_loop(self):
 
@@ -82,6 +86,9 @@ def main():
 
     parser.add_argument('--save_params', action='store_true')
     parser.add_argument('--action_noise_std', type=float, default=0)
+
+    parser.add_argument('--num_envs', type=int, default=1)
+    parser.add_argument('--multi_step', type=int, default=1)
 
     args = parser.parse_args()
 

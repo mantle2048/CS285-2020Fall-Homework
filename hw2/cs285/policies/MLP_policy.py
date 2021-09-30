@@ -129,7 +129,6 @@ class MLPPolicy(BasePolicy, nn.Module, metaclass=abc.ABCMeta):
 
 #####################################################
 #####################################################
-
 class MLPPolicyPG(MLPPolicy):
     def __init__(self, ac_dim, ob_dim, n_layers, size, **kwargs):
 
@@ -149,7 +148,6 @@ class MLPPolicyPG(MLPPolicy):
             # by the `forward` method
         # HINT3: don't forget that `optimizer.step()` MINIMIZES a loss
 
-        # import ipdb; ipdb.set_trace()
         log_pi = self.forward(observations).log_prob(actions)
         weighted_pg = torch.mul(log_pi, advantages)
         loss = torch.neg(torch.sum(weighted_pg))
@@ -185,6 +183,7 @@ class MLPPolicyPG(MLPPolicy):
             baseline_loss.backward()
             self.baseline_optimizer.step()
 
+
         train_log = {
             'Training Loss': ptu.to_numpy(loss)
         }
@@ -203,4 +202,49 @@ class MLPPolicyPG(MLPPolicy):
         obs = ptu.from_numpy(obs)
         predictions = self.baseline(obs)
         return ptu.to_numpy(predictions)[:, 0]
+
+
+class MultiStepMLPPolicyPG(MLPPolicyPG):
+
+    def __init__(self, multi_step, *args, **kwargs):
+        MLPPolicyPG.__init__(self, *args, **kwargs)
+        self.multi_step = multi_step
+
+    def update(self, observations, actions, advantages, q_values=None):
+        observations = ptu.from_numpy(observations)
+        actions = ptu.from_numpy(actions)
+        advantages = ptu.from_numpy(advantages)
+
+        log_pi = self.forward(observations).log_prob(actions)
+        weighted_pg = torch.mul(log_pi, advantages)
+        loss = torch.neg(torch.sum(weighted_pg))
+
+        self.optimizer.zero_grad()
+        for _ in range(self.multi_step-1):
+            loss.backward(retain_graph=True)
+
+        loss.backward()
+        self.optimizer.step()
+
+        if self.nn_baseline:
+
+            mean_q, std_q = np.mean(q_values), np.std(q_values)
+            targets = utils.normalize(q_values, mean_q, std_q)
+            targets = ptu.from_numpy(targets)
+
+            baseline_predictions = self.baseline(observations).flatten()
+
+            assert baseline_predictions.shape == targets.shape
+
+            baseline_loss = self.baseline_loss(baseline_predictions, targets)
+
+            self.baseline_optimizer.zero_grad()
+            baseline_loss.backward()
+            self.baseline_optimizer.step()
+
+
+        train_log = {
+            'Training Loss': ptu.to_numpy(loss)
+        }
+        return train_log
 
