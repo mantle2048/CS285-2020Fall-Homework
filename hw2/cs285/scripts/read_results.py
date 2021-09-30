@@ -243,14 +243,14 @@ def plot_q7_figure():
     print('==='*16)
 
 if __name__ == '__main__':
-    plot_q1_figure()
-    plot_q2_figure()
-    plot_q3_figure()
-    plot_q4_1_figure()
-    plot_q4_2_figure()
-    plot_q5_figure()
+    # plot_q1_figure()
+    # plot_q2_figure()
+    # plot_q3_figure()
+    # plot_q4_1_figure()
+    # plot_q4_2_figure()
+    # plot_q5_figure()
     plot_q6_figure()
-    plot_q7_figure()
+    # plot_q7_figure()
 
 
 
