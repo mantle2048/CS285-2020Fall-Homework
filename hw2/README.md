@@ -205,3 +205,4 @@ self.optimizer.step()
 <!-- #endregion -->
 
 ![q7](image/q7.png)
+**<center> fig9: experiment of Bonus-MultiStepPG </center>**
