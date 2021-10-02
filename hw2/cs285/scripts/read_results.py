@@ -31,7 +31,7 @@ def get_section_results(file):
                 steps.append(v.simple_value)
             elif v.tag == 'Eval_AverageReturn':
                 rewards.append(v.simple_value)
-                
+
     itor = len(steps)
     result_dict = dict(Train_steps=steps, Return=rewards, Iteration=list(range(0,itor)))# exp_name=[exp_name]*itor, env_name=[env_name]*itor)
     df = pd.DataFrame(result_dict)
@@ -59,7 +59,7 @@ def plot_data(data, xaxis='Iteration', value='Return', condition='exp_name', smo
 
 
 def plot_q1_figure():
-    
+
     logdir = os.path.join(cur_dir, 'run_logs/q1_sb*/events*')
     data = []
     for eventfile in sorted(glob.glob(logdir)):
@@ -72,7 +72,7 @@ def plot_q1_figure():
     size = data
     plot_data(data, smooth=1)
     plt.savefig(os.path.join(imgdir, data[0]['exp_name'][0][0:5]+'.png'), dpi=300)
-    
+
     logdir = os.path.join(cur_dir, 'run_logs/q1_lb*/events*')
     data = []
     for eventfile in sorted(glob.glob(logdir)):
@@ -84,7 +84,7 @@ def plot_q1_figure():
         data.append(event_data)
     plot_data(data, smooth=1)
     plt.savefig(os.path.join(imgdir, data[0]['exp_name'][0][0:5]+'.png'), dpi=300)
-    
+
     print('==='*16)
     print('q1 figures were saved in folder image')
     print('==='*16)

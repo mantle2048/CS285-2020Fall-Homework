@@ -7,11 +7,11 @@
 
 ### 1.1 q1 small batch
 ![q1_lb](image/q1_sb.png)
-**<center>fig1: experiments of q1_sb </center>**
+**<p align="center">fig1: experiments of q1_sb </p>**
 
 ### 1.2 q1 large batch
 ![q1_lb](image/q1_lb.png)
-**<center>fig2: experiments of q1_lb </center>**
+**<p align="center">fig2: experiments of q1_lb </p>**
 
 <!-- #region -->
 ### 1.3 Q&A
@@ -57,7 +57,7 @@
 
 
 ![q2](image/q2.png)
-**<center>fig3: experiments of q2 </center>**
+**<p align="center">fig3: experiments of q2</p>**
 <!-- #endregion -->
 
 <!-- #region -->
@@ -81,7 +81,7 @@
 <!-- #endregion -->
 
 ![q3](image/q3.png)
-**<center>fig4: experiments of q3 </center>**
+**<p align="center">fig4: experiments of q3</p>**
 
 <!-- #region -->
 ## 4 Experiment 4 (LunarLander)
@@ -101,7 +101,7 @@
 <!-- #endregion -->
 
 ![q4](image/q4_1.png)
-**<center>fig5: experiments of q4.1 </center>**
+**<p align="center">fig5: experiments of q4.1</p>**
 
 <!-- #region -->
 ### 4.2 learning curve
@@ -113,12 +113,12 @@
 <!-- #endregion -->
 
 ![q4.2](image/q4_2.png)
-**<center>fig6: experiments of q4.2 </center>**
+**<p align="center">fig6: experiments of q4.2</p>**
 
 <!-- #region -->
 ## Bonus-GAE
 
-## Experiment 5 (Hopper-v2) 
+## Experiment 5 (Hopper-v2)
 **Note:** (this experiment copy from cs285 2021Fall homework)
 
 
@@ -129,7 +129,7 @@
 <!-- #endregion -->
 
 ![q5](image/q5.png)
-**<center>fig7: experiments of Bouns-GAE </center>**
+**<p align="center">fig7: experiments of Bouns-GAE</p>**
 
 <!-- #region -->
 ## Bonus-Multi threads
@@ -172,7 +172,7 @@ def make_envs(env_id, num_envs, seed, start_idx=0):
 <!-- #endregion -->
 
 ![q6](image/q6.png)
-**<center> fig8: experiment of Bonus-MultiThread </center>**
+**<p align="center">fig8: experiments of Bouns-MultiThread</p>**
 
 <!-- #region -->
 ## Bonus-MultiStep PG
@@ -205,4 +205,4 @@ self.optimizer.step()
 <!-- #endregion -->
 
 ![q7](image/q7.png)
-**<center> fig9: experiment of Bonus-MultiStepPG </center>**
+**<p align="center">fig9: experiments of Bouns-MultiStepPG</p>**
