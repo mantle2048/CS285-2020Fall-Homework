@@ -87,7 +87,17 @@ class MLPPolicy(BasePolicy, nn.Module, metaclass=abc.ABCMeta):
     # query the policy with observation(s) to get selected action(s)
     def get_action(self, obs: np.ndarray) -> np.ndarray:
         # TODO: get this from Piazza
-        return action
+        if len(obs.shape) > 1:
+            observation = obs
+        else:
+            observation = obs[None]
+
+        observation = ptu.from_numpy(obs.astype(np.float32))
+
+        act_dist = self.forward(observation)
+        act = act_dist.sample()
+
+        return ptu.to_numpy(act)
 
     # update/train this policy
     def update(self, observations, actions, **kwargs):
@@ -100,7 +110,19 @@ class MLPPolicy(BasePolicy, nn.Module, metaclass=abc.ABCMeta):
     # `torch.distributions.Distribution` object. It's up to you!
     def forward(self, observation: torch.FloatTensor):
         # TODO: get this from Piazza
-        return action_distribution
+        if self.discrete:
+            logits_na = self.logits_na(observation)
+            act_dist = distributions.Categorical(logits=logits_na)
+
+        else:
+            mean_na = self.mean_net(observation)
+            std_na = torch.exp(self.logstd)
+            # helpful: difference between multivariatenormal and normal sample/batch/event shapes:
+            # https://bochang.me/blog/posts/pytorch-distributions/
+            # https://ericmjl.github.io/blog/2019/5/29/reasoning-about-shapes-and-probability-distributions/
+            act_dist = distributions.MultivariateNormal(loc=mean_na, scale_tril=torch.diag(std_na))
+
+        return act_dist
 
 
 #####################################################

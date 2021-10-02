@@ -456,6 +456,7 @@ class MemoryOptimizedReplayBuffer(object):
         missing_context = self.frame_history_len - (end_idx - start_idx)
         # if zero padding is needed for missing context
         # or we are on the boundry of the buffer
+        # start_idx < 0 means that your frame_history_len is larger than self.size, and you need to zero padding.
         if start_idx < 0 or missing_context > 0:
             frames = [np.zeros_like(self.obs[0]) for _ in range(missing_context)]
             for idx in range(start_idx, end_idx):

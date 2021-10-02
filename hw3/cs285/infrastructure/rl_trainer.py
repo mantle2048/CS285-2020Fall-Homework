@@ -134,9 +134,9 @@ class RL_Trainer(object):
         self.total_envsteps = 0
         self.start_time = time.time()
 
-        print_period = 1000 if isinstance(self.agent, DQNAgent) else 1
+        print_period = 10000 if isinstance(self.agent, DQNAgent) else 1
 
-        for itr in range(n_iter):
+        for itr in range(1, n_iter+1):
             if itr % print_period == 0:
                 print("\n\n********** Iteration %i ************"%itr)
 
@@ -210,12 +210,35 @@ class RL_Trainer(object):
             envsteps_this_batch: the sum over the numbers of environment steps in paths
             train_video_paths: paths which also contain videos for visualization purposes
         """
-        # TODO: get this from Piazza
+        if itr == 0 and load_initial_expertdata is not None:
+            import pickle
+            with open(load_initial_expertdata, 'rb') as fr:
+                loaded_paths = pickle.load(fr)
+                return loaded_paths, 0, None
+
+        print("\nCollecting data to be used for training...")
+        paths, envsteps_this_batch = \
+                utils.sample_trajectories(self.env, collect_policy, batch_size, self.params['ep_len'])
+
+        train_video_paths = None
+        if self.log_video:
+            print("\nCollecting train rollouts to be used for saving videos...")
+            train_video_paths = utils.sample_n_trajectories(self.env, collect_policy, MAX_NVIDEO, MAX_VIDEO_LEN, render=True)
+
+        # TODO/Done: get this from Piazza
 
         return paths, envsteps_this_batch, train_video_paths
 
     def train_agent(self):
-        # TODO: get this from Piazza
+        # TODO/Done: get this from Piazza
+        # print('\nTraining agent using sampled data from replay buffer...')
+        train_logs = []
+        for train_step in range(self.params['num_agent_train_steps_per_iter']):
+            obs_batch, act_batch, rew_batch, next_obs_batch, terminal_batch = self.agent.sample(self.params['train_batch_size'])
+            train_log = self.agent.train(obs_batch, act_batch, rew_batch, next_obs_batch, terminal_batch)
+            train_logs.append(train_log)
+
+        return train_logs
 
     ####################################
     ####################################
