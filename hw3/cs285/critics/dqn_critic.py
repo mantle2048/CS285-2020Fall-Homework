@@ -66,7 +66,7 @@ class DQNCritic(BaseCritic):
         q_t_values = torch.gather(qa_t_values, 1, ac_na.unsqueeze(1)).squeeze(1)
         # According to the selected actions to gather the corresponding action_values
 
-        # TODO compute the Q-values from the target network 
+        # TODO/Done compute the Q-values from the target network 
         qa_tp1_values = self.q_net_target(next_ob_no)
 
         if self.double_q:
@@ -74,7 +74,8 @@ class DQNCritic(BaseCritic):
             # In double Q-learning, the best action is selected using the Q-network that
             # is being updated, but the Q-value for this action is obtained from the
             # target Q-network. See page 5 of https://arxiv.org/pdf/1509.06461.pdf for more details.
-            TODO
+            next_ac_na = self.q_net(next_ob_no).argmax(dim=1)
+            q_tp1 = torch.gather(qa_tp1_values, 1, next_ac_na.unsqueeze(1)).squeeze(1)
         else:
             q_tp1, _ = qa_tp1_values.max(dim=1)
 

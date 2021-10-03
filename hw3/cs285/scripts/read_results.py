@@ -23,7 +23,7 @@ def get_section_results(file):
     """
         requires tensorflow==1.12.0
     """
-    steps = []
+    steps = [0]
     rewards = []
     best_rewards = []
     for e in tf.train.summary_iterator(file):
@@ -88,7 +88,60 @@ def plot_q1_lander_figure():
     print('==='*16)
 
 
+def plot_q1_figure():
+
+    logdir = os.path.join(cur_dir, 'run_logs/hw3_q1_MsPacman*/events*')
+    data = []
+    for eventfile in sorted(glob.glob(logdir)):
+        exp_name = '_'.join(eventfile.split('/')[-2].split('_')[1:-1])
+        env_name = eventfile.split('/')[-2].split('_')[-1]
+        event_data = get_section_results(eventfile)
+        return_data = event_data[['Train_steps', 'Return','Iteration']]
+        return_data['exp_name'] = ['Train_AverageReturn'] * return_data.shape[0]
+        best_return_data = event_data[['Train_steps', 'Best_Return','Iteration']]
+        best_return_data['exp_name'] = ['Train_BestReturn'] * best_return_data.shape[0]
+        best_return_data.columns = return_data.columns.values.tolist()
+        event_data = return_data.append(best_return_data, ignore_index=True)
+        print(event_data)
+        event_data['env_name'] = [env_name] * event_data.shape[0]
+        data.append(event_data)
+    fig, ax = plt.subplots(1,1,figsize=(12,8))
+    ax.set(xlim=(0, 1500001))
+    plot_data(data,smooth=1, ax=ax)
+    plt.savefig(os.path.join(imgdir, exp_name), dpi=300)
+
+    print('==='*16)
+    print('q1 figure was saved in folder image')
+    print('==='*16)
+
+
+def plot_q2_figure():
+
+    logdir = os.path.join(cur_dir, 'run_logs/hw3_q2*/events*')
+    data = []
+    for eventfile in sorted(glob.glob(logdir)):
+        exp_name = '_'.join(eventfile.split('/')[-2].split('_')[1:-2])
+        exp_name_seed = '_'.join(eventfile.split('/')[-2].split('_')[1:-1])
+        env_name = eventfile.split('/')[-2].split('_')[-1]
+        event_data = get_section_results(eventfile)
+        event_data['env_name'] = [env_name] * event_data.shape[0]
+        event_data['exp_name'] = [exp_name] * event_data.shape[0]
+        event_data['exp_name_seed'] = [exp_name_seed] * event_data.shape[0]
+        data.append(event_data)
+    fig, ax = plt.subplots(1,1,figsize=(12,8))
+    # ax.set(xlim=(0, 1500001))
+    plot_data(data,smooth=11, ax=ax, condition='exp_name')
+    plt.savefig(os.path.join(imgdir, exp_name), dpi=300)
+
+    print('==='*16)
+    print('q2 figure was saved in folder image')
+    print('==='*16)
+
+
 if __name__ == '__main__':
-    plot_q1_lander_figure()
+    # plot_q1_lander_figure()
+    # plot_q1_figure()
+    plot_q2_figure()
+    
 
 

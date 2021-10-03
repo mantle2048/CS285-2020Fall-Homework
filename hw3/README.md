@@ -1,36 +1,43 @@
-## Setup
+<!-- #region -->
+**Note**: Run `pip install -e .` to install cs285 package
 
-You can run this code on your own machine or on Google Colab. 
 
-1. **Local option:** If you choose to run locally, you will need to install MuJoCo and some Python packages; see [installation.md](../hw1/installation.md) from homework 1 for instructions. There are two new package requirements (`opencv-python` and `gym[atari]`) beyond what was used in the previous assignments; make sure to install these with `pip install -r requirements.txt` if you are running the assignment locally.
+# Section 3
+## 1. Question 1: basic Q-learning performance. (DQN)
+<!-- #endregion -->
 
-2. **Colab:** The first few sections of the notebook will install all required dependencies. You can try out the Colab option by clicking the badges below:
+<!-- #region -->
+- **Excute `./run.sh 3.0` to run experiments on LunarLander-v3.**
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/berkeleydeeprlcourse/homework_fall2020/blob/master/hw3/cs285/scripts/run_hw3_dqn.ipynb) **Part I (Q-learning)** 
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/berkeleydeeprlcourse/homework_fall2020/blob/master/hw3/cs285/scripts/run_hw3_actor_critic.ipynb)     **Part II (Actor-critic)** 
+- **Excute `python cs285/scripts/read_results.py` to get the following figure(the figure will be saved in image folder)**
+<!-- #endregion -->
 
-## Complete the code
+![q1_lander](image/q1_lander.png)
 
-The following files have blanks to be filled with your solutions from homework 1. The relevant sections are marked with `TODO: get this from hw1 or hw2`.
+<!-- #region -->
+- **Excute `./run.sh 3.1` to run experiments on MsPacman-v0.**
 
-- [infrastructure/rl_trainer.py](cs285/infrastructure/rl_trainer.py)
-- [infrastructure/utils.py](cs285/infrastructure/utils.py)
-- [policies/MLP_policy.py](cs285/policies/MLP_policy.py)
 
-You will then need to implement new routines in the following files for homework 3 part 1 (Q-learning):
-- [agents/dqn_agent.py](cs285/agents/dqn_agent.py)
-- [critics/dqn_critic.py](cs285/critics/dqn_critic.py)
-- [policies/argmax_policy.py](cs285/policies/argmax_policy.py)
+- **Excute `python cs285/scripts/read_results.py` to get the following figure(the figure will be saved in image folder)**
+<!-- #endregion -->
 
-and in the following files for part 2 (actor-critic):
-- [agents/ac_agent.py](cs285/agents/ac_agent.py)
-- [critics/bootstrapped_continuous_critic.py](cs285/critics/bootstrapped_continuous_critic.py)
-- [policies/MLP_policy.py](cs285/policies/MLP_policy.py)
+![q1](image/q1.png)
 
-The relevant sections are marked with `TODO`.
+<!-- #region -->
+## 2. Question 2: double Q-learning (DDQN)
 
-You may also want to look through [run_hw3_dqn.py](cs285/scripts/run_hw3_dqn.py) and [run_hw3_actor_critic.py](cs285/scripts/run_hw3_actor_critic.py) (if running locally) or [run_hw3_dqn.ipynb](cs285/scripts/run_hw3_dqn.ipynb) and [run_hw3_actor_critic.ipynb](cs285/scripts/run_hw3_actor_critic.ipynb) (if running on Colab), though you will not need to edit this files beyond changing runtime arguments in the Colab notebook.
+- **Excute `./run.sh 3.2` to run experiments on LumarLander-v3 (5 runs).**
 
-See the [assignment PDF](cs285_hw3.pdf) for more details on what files to edit.
 
+- **Excute `python cs285/scripts/read_results.py` to get the following figure(the figure will be saved in image folder).**
+<!-- #endregion -->
+
+![q2](image/q2_dqn.png)
+
+
+![q2](image/q2_dqn_seed.png)
+
+```python
+
+```

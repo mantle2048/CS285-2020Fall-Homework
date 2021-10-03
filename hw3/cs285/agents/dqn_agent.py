@@ -50,7 +50,7 @@ class DQNAgent(object):
         eps = self.exploration.value(self.t)
 
         # TODO/Done use epsilon greedy exploration when selecting action
-        perform_random_action = (np.random.random() < eps) if self.t > self.learning_starts else True
+        perform_random_action = np.random.binomial(n=1, p=eps) or self.t < self.learning_starts
         if perform_random_action:
             # HINT: take random action 
                 # with probability eps (see np.random.random())
@@ -68,8 +68,7 @@ class DQNAgent(object):
         # HINT1: remember that self.last_obs must always point to the newest/latest observation
         # HINT2: remember the following useful function that you've seen before:
             #obs, reward, done, info = env.step(action)
-        obs, rew, done, info = self.env.step(action)
-        self.last_obs = obs
+        self.last_obs , rew, done, info = self.env.step(action)
 
         # TODO store the result of taking this action into the replay buffer
         # HINT1: see your replay buffer's `store_effect` function

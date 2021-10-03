@@ -90,6 +90,7 @@ def create_lander_q_network(ob_dim, num_actions):
     )
 
 class Ipdb(nn.Module):
+    ''' a cool tool for ipdb debugging. Mark!'''
     def __init__(self):
         super().__init__()
     def forward(self, x):
@@ -237,7 +238,7 @@ class PiecewiseSchedule(object):
         assert idxes == sorted(idxes)
         self._interpolation = interpolation
         self._outside_value = outside_value
-        self._endpoints      = endpoints
+        self._endpoints     = endpoints
 
     def value(self, t):
         """See Schedule.value"""
