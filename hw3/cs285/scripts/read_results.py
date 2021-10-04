@@ -208,6 +208,3 @@ if __name__ == '__main__':
     # plot_q3_figure()
     # plot_q4_figure()
     plot_q5_figure()
-
-
-
