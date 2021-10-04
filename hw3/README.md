@@ -78,6 +78,5 @@
 - **Excute `python cs285/scripts/read_results.py` to get the following figure(the figure will be saved in image folder).**
 <!-- #endregion -->
 
-```python
-
-```
+![q5_1](image/q5_ac_10_10_InvertedPendulum-v2.png)
+![q5_1](image/q5_ac_10_10_HalfCheetah-v2.png)
