@@ -92,6 +92,8 @@ def sample_trajectory(env, policy, max_path_length, render=False, render_mode=('
         if rollout_done:
             break
 
+    return Path(obss, image_obss, acts, rews, next_obss, terminals)
+
 def sample_trajectories(env, policy, min_timesteps_per_batch, max_path_length, render=False, render_mode=('rgb_array')):
     """
         Collect rollouts using policy

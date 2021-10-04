@@ -138,10 +138,76 @@ def plot_q2_figure():
     print('==='*16)
 
 
+def plot_q3_figure():
+
+    my_cmp = lambda x:int(x.split('/')[-2].split('_')[-2])
+    logdir = os.path.join(cur_dir, 'run_logs/hw3_q3*/events*')
+    data = []
+    for eventfile in sorted(glob.glob(logdir), key=my_cmp):
+        exp_name = '_'.join(eventfile.split('/')[-2].split('_')[1:-1])
+        env_name = eventfile.split('/')[-2].split('_')[-1]
+        event_data = get_section_results(eventfile)
+        event_data['env_name'] = [env_name] * event_data.shape[0]
+        event_data['exp_name'] = [exp_name] * event_data.shape[0]
+        data.append(event_data)
+    fig, ax = plt.subplots(1,1,figsize=(12,8))
+    plot_data(data,smooth=1, ax=ax, condition='exp_name')
+    plt.savefig(os.path.join(imgdir, 'q3.png'), dpi=300)
+
+    print('==='*16)
+    print('q3 figure was saved in folder image')
+    print('==='*16)
+
+
+def plot_q4_figure():
+
+    my_cmp = lambda x:(int(x.split('/')[-2].split('_')[-3]), int(x.split('/')[-2].split('_')[-2]))
+    logdir = os.path.join(cur_dir, 'run_logs/hw3_q4*/events*')
+    data = []
+    for eventfile in sorted(glob.glob(logdir), key=my_cmp):
+        exp_name = '_'.join(eventfile.split('/')[-2].split('_')[1:-1])
+        env_name = eventfile.split('/')[-2].split('_')[-1]
+        event_data = get_section_results(eventfile)
+        event_data['env_name'] = [env_name] * event_data.shape[0]
+        event_data['exp_name'] = [exp_name] * event_data.shape[0]
+        data.append(event_data)
+    fig, ax = plt.subplots(1,1,figsize=(12,8))
+    plot_data(data,smooth=1, ax=ax, condition='exp_name')
+    plt.savefig(os.path.join(imgdir, 'q4.png'), dpi=300)
+
+    print('==='*16)
+    print('q4 figure was saved in folder image')
+    print('==='*16)
+
+
+def plot_q5_figure():
+
+    logdir = os.path.join(cur_dir, 'run_logs/hw3_q5*/events*')
+    data = []
+    for eventfile in sorted(glob.glob(logdir)):
+        exp_name = '_'.join(eventfile.split('/')[-2].split('_')[1:-1])
+        env_name = eventfile.split('/')[-2].split('_')[-1]
+        event_data = get_section_results(eventfile)
+        event_data['env_name'] = [env_name] * event_data.shape[0]
+        event_data['exp_name'] = [exp_name] * event_data.shape[0]
+        data.append(event_data)
+        fig, ax = plt.subplots(1,1,figsize=(12,8))
+        plot_data(data,xaxis='Iteration', smooth=1, ax=ax, condition='exp_name')
+        plt.savefig(os.path.join(imgdir, f'{exp_name}_{env_name}.png'), dpi=300)
+        data = []
+
+    print('==='*16)
+    print('q5 figures were saved in folder image')
+    print('==='*16)
+
+
 if __name__ == '__main__':
     # plot_q1_lander_figure()
     # plot_q1_figure()
-    plot_q2_figure()
-    
+    # plot_q2_figure()
+    # plot_q3_figure()
+    # plot_q4_figure()
+    plot_q5_figure()
+
 
 

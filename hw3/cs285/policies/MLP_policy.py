@@ -130,7 +130,22 @@ class MLPPolicy(BasePolicy, nn.Module, metaclass=abc.ABCMeta):
 
 
 class MLPPolicyAC(MLPPolicy):
+    def __init__(self, ac_dim, ob_dim, n_layers, size, **kwargs):
+
+        super().__init__(ac_dim, ob_dim, n_layers, size, **kwargs)
+
     def update(self, observations, actions, adv_n=None):
         # TODO: update the policy and return the loss
-        loss = TODO
+        observations = ptu.from_numpy(observations)
+        actions = ptu.from_numpy(actions)
+        adv_n = ptu.from_numpy(adv_n)
+
+        log_pi = self.forward(observations).log_prob(actions)
+        weighted_pg = torch.mul(log_pi, adv_n)
+        loss = torch.neg(torch.mean(weighted_pg))
+
+        self.optimizer.zero_grad()
+        loss.backward()
+        self.optimizer.step()
+
         return loss.item()

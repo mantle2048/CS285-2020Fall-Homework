@@ -38,6 +38,46 @@
 
 ![q2](image/q2_dqn_seed.png)
 
+<!-- #region -->
+## 3. Question 3:  Experimenting with hyperparameters.
+
+- **Excute `./run.sh 3.3` to run experiments on LumarLander-v3.**
+
+
+- **Select `batch_size` from (16 32 64 128)**
+
+
+- **Excute `python cs285/scripts/read_results.py` to get the following figure(the figure will be saved in image folder).**
+<!-- #endregion -->
+
+![q3](image/q3.png)
+
+<!-- #region -->
+## 4. Question 4:   Sanity check with Cartpole
+
+- **Excute `./run.sh 3.4` to run experiments on Cartpole-v0.**
+
+
+- **Excute `python cs285/scripts/read_results.py` to get the following figure(the figure will be saved in image folder).**
+
+
+- **`num_target_updates=10` and `num_grad_steps_per_target_update=10` seems bettter.**
+<!-- #endregion -->
+
+![q4](image/q4.png)
+
+<!-- #region -->
+## 5. Question 5:   Sanity check with Cartpole
+
+- **Run actor-critic with more difficult tasks. Use the best setting from the previous question to run InvertedPendulum and HalfCheetah.**
+
+
+- **Excute `./run.sh 3.5` to run experiments on Cartpole-v0.**
+
+
+- **Excute `python cs285/scripts/read_results.py` to get the following figure(the figure will be saved in image folder).**
+<!-- #endregion -->
+
 ```python
 
 ```
