@@ -55,9 +55,44 @@ def mean_squared_error(a, b):
 ############################################
 
 def sample_trajectory(env, policy, max_path_length, render=False, render_mode=('rgb_array')):
-        raise NotImplementedError
-        # TODO: get this from hw1 or hw2
-        # IMPORTANT CHANGE: Comment out the line: ac = ac[0], as Argmax Policy already returns a scalar
+    # TODO/Done: get this from hw1 or hw2
+    # IMPORTANT CHANGE: Comment out the line: ac = ac[0], as Argmax Policy already returns a scalar
+    obs = env.reset()
+
+    obss, acts, rews, next_obss, terminals, image_obss = [], [], [], [], [], []
+    steps = 0
+    while True:
+
+        if render:
+            if 'rgb_array' in render_mode:
+                if hasattr(env, 'sim'):
+                    image_obss.append(env.sim.render(camera_name='track', height=500, width=500)[::-1])
+                else:
+                    image_obss.append(env.render(mode=render_mode))
+            if 'human' in render_mode:
+                env.render(mode=render_mode)
+                time.sleep(env.model.opt.timestep)
+
+        obss.append(obs)
+        act = policy.get_action(obs)
+
+        acts.append(act)
+
+        next_obs, rew, done, _ = env.step(act)
+
+        rews.append(rew)
+        next_obss.append(next_obs)
+        obs = next_obs
+
+        steps += 1
+
+        rollout_done = done or steps >= max_path_length
+        terminals.append(rollout_done)
+
+        if rollout_done:
+            break
+
+    return Path(obss, image_obss, acts, rews, next_obss, terminals)
 
     ####################################
     ####################################
@@ -67,8 +102,16 @@ def sample_trajectories(env, policy, min_timesteps_per_batch, max_path_length, r
         Collect rollouts using policy
         until we have collected min_timesteps_per_batch steps
     """
-        raise NotImplementedError
-        # TODO: get this from hw1 or hw2
+    # TODO/Done: get this from hw1 or hw2
+    paths = []
+    timesteps_this_batch = 0
+    while timesteps_this_batch < min_timesteps_per_batch:
+        # cur_path_length = min(max_path_length, min_timesteps_per_batch - timesteps_this_batch)
+        path = sample_trajectory(env, policy, max_path_length, render, render_mode)
+        timesteps_this_batch += get_pathlength(path)
+        paths.append(path)
+
+    return paths, timesteps_this_batch
 
     ####################################
     ####################################
@@ -77,8 +120,9 @@ def sample_n_trajectories(env, policy, ntraj, max_path_length, render=False, ren
     """
         Collect ntraj rollouts using policy
     """
-        raise NotImplementedError
-        # TODO: get this from hw1 or hw2
+    # TODO/Done: get this from hw1 or hw2
+    paths = [ sample_trajectory(env, policy, max_path_length, render, render_mode) for _ in range(ntraj) ]
+    return paths
 
     ####################################
     ####################################

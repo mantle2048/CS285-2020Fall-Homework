@@ -52,6 +52,7 @@ def main():
     parser.add_argument('--batch_size', type=int, default=256)
 
     parser.add_argument('--use_rnd', action='store_true')
+    parser.add_argument('--use_dyn', action='store_true')
     parser.add_argument('--num_exploration_steps', type=int, default=10000)
     parser.add_argument('--unsupervised_exploration', action='store_true')
 
@@ -64,6 +65,10 @@ def main():
     parser.add_argument('--rnd_output_size', type=int, default=5)
     parser.add_argument('--rnd_n_layers', type=int, default=2)
     parser.add_argument('--rnd_size', type=int, default=400)
+
+    parser.add_argument('--dyn_output_size', type=int, default=5)
+    parser.add_argument('--dyn_n_layers', type=int, default=2)
+    parser.add_argument('--dyn_size', type=int, default=400)
 
     parser.add_argument('--seed', type=int, default=2)
     parser.add_argument('--no_gpu', '-ngpu', action='store_true')
@@ -95,19 +100,20 @@ def main():
         params['ep_len']=100
     if params['env_name']=='PointmassVeryHard-v0':
         params['ep_len']=200
-    
-    if params['use_rnd']:
+
+    if params['use_rnd'] or params['use_dyn']:
         params['explore_weight_schedule'] = PiecewiseSchedule([(0,1), (params['num_exploration_steps'], 0)], outside_value=0.0)
+
     else:
         params['explore_weight_schedule'] = ConstantSchedule(0.0)
 
     if params['unsupervised_exploration']:
         params['explore_weight_schedule'] = ConstantSchedule(1.0)
         params['exploit_weight_schedule'] = ConstantSchedule(0.0)
-        
-        if not params['use_rnd']:
+
+        if not params['use_rnd'] and not params['use_dyn']:
             params['learning_starts'] = params['num_exploration_steps']
-    
+
 
     logdir_prefix = 'hw5_expl_'  # keep for autograder
     data_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../../data')

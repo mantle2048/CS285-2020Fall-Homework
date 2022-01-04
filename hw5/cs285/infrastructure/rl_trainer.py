@@ -217,18 +217,32 @@ class RL_Trainer(object):
             envsteps_this_batch: the sum over the numbers of environment steps in paths
             train_video_paths: paths which also contain videos for visualization purposes
         """
-        raise NotImplementedError
-        # TODO: get this from hw1 or hw2
+        # TODO/Done: get this from hw1 or hw2
+        if itr == 0 and load_initial_expertdata is not None:
+            import pickle
+            with open(load_initial_expertdata, 'rb') as fr:
+                loaded_paths = pickle.load(fr)
+                return loaded_paths, 0, None
+
+        print("\nCollecting data to be used for training...")
+        paths, envsteps_this_batch = \
+                utils.sample_trajectories(self.env, collect_policy, batch_size, self.params['ep_len'])
+
+        train_video_paths = None
+        if self.logvideo:
+            print("\nCollecting train rollouts to be used for saving videos...")
+            train_video_paths = utils.sample_n_trajectories(self.env, collect_policy, MAX_NVIDEO, MAX_VIDEO_LEN, render=True)
+
+        return paths, envsteps_this_batch, train_video_paths
 
     ####################################
     ####################################
 
     def train_agent(self):
-        # TODO: get this from Piazza
+        # TODO/Done: get this from Piazza
         all_logs = []
         for train_step in range(self.params['num_agent_train_steps_per_iter']):
             ob_batch, ac_batch, re_batch, next_ob_batch, terminal_batch = self.agent.sample(self.params['train_batch_size'])
-            # import ipdb; ipdb.set_trace()
             train_log = self.agent.train(ob_batch, ac_batch, re_batch, next_ob_batch, terminal_batch)
             all_logs.append(train_log)
         return all_logs
@@ -367,12 +381,15 @@ class RL_Trainer(object):
         num_states = self.agent.replay_buffer.num_in_buffer - 2
         states = self.agent.replay_buffer.obs[:num_states]
         if num_states <= 0: return
-        
+
         H, xedges, yedges = np.histogram2d(states[:,0], states[:,1], range=[[0., 1.], [0., 1.]], density=True)
         plt.imshow(np.rot90(H), interpolation='bicubic')
         plt.colorbar()
         plt.title('State Density')
         self.fig.savefig(filepath('state_density'), bbox_inches='tight')
+
+        if self.params['use_dyn']:
+            return
 
         plt.clf()
         ii, jj = np.meshgrid(np.linspace(0, 1), np.linspace(0, 1))
