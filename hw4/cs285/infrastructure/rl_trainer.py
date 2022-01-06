@@ -51,6 +51,7 @@ class RL_Trainer(object):
         #############
 
         # Make the gym environment
+        import ipdb; ipdb.set_trace()
         self.env = gym.make(self.params['env_name'])
         if 'env_wrappers' in self.params:
             # These operations are currently only for Atari envs
