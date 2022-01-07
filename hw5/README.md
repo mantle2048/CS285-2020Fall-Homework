@@ -63,42 +63,33 @@ On the contrary, if a state transition is rarely explored, the prediction of the
 #### [ RND ] State Density Heat Map in PointmassHard-v0
 ![](run_logs/part1_sub2/hw5_expl_q1_hard_rnd/hw5_expl_q1_rnd_hard_PointmassHard-v0/curr_state_density.png)
 
-```python
 
-```
+## 2. Part2
+### 2.1 Sub-Part 1
 
-```python
 
-```
+- **Hint: The transformed reward function is r~(s,a) = (r(s,a)+ reward_shift) * reward_scale**
 
-```python
+- **From the following figure, CQL can give rise to Q values that underestimate the Q-values learned via a standard DQN.**
+![](image/part2_sub1_Exploitation_Data_q-values.png)
 
-```
 
-```python
+### 2.2 Sub-Part2
+- **The following figure illustrates that more exploration steps can help stable the training process.**
+![](image/part2_sub2_Eval_AverageReturn.png)
 
-```
 
-```python
+### 2.3 Sub-Part3
+- **The following figure illustrates that alpha=0.1 seems to be a not beed choice.**
+- **Note that the env rewards utilized by CQL are magnified by shift and scale, so the performance of CQL is slightly lower than that of dqn.**
+![](image/part2_sub3_Eval_AverageReturn.png)
 
-```
 
-```python
+## 3. Part3
+- **As can be seen from the figure below, DQN is significantly better than CQL (CQL rewards are scaled by shift and scale)**
+- **I have no idea whether there is something wrong with my implementation, because I have not found that CQL is better than dqn in hard environments, as described in *hw5.pdf* .**
+![](image/part3_Eval_AverageReturn.png)
 
-```
 
-```python
-
-```
-
-```python
-
-```
-
-```python
-
-```
-
-```python
-
-```
+## 4. Part4
+- **waiting to do.......**
